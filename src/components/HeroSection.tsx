@@ -28,9 +28,12 @@ const HeroSection = () => {
           </p>
           
           {/* CTA Button */}
-          <Button size="lg" className="bg-cyber-gradient hover:opacity-90 text-white font-semibold px-8 py-4 animate-glow-pulse mb-12" style={{
-          animationDelay: '0.4s'
-        }}>
+          <Button 
+            size="lg" 
+            className="bg-cyber-gradient hover:opacity-90 text-white font-semibold px-8 py-4 animate-glow-pulse mb-12" 
+            style={{ animationDelay: '0.4s' }}
+            onClick={() => window.location.href = '/auth'}
+          >
             Start Earning $AKIRA
             <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
