@@ -5,125 +5,71 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import { PasswordInput } from '@/components/ui/password-input';
+import { useSecureAuth } from '@/hooks/useSecureAuth';
+import { emailSchema } from '@/lib/auth-utils';
 
 const Auth = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [emailError, setEmailError] = useState('');
   const navigate = useNavigate();
-  const { toast } = useToast();
+  const { user, loading, signUp, signIn, isInitialized } = useSecureAuth();
 
+  // Redirect authenticated users to dashboard
   useEffect(() => {
-    // Check if user is already logged in
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
-        navigate('/dashboard');
-      }
-    });
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        if (event === 'SIGNED_IN' && session) {
-          await handleUserCreation(session);
-          navigate('/dashboard');
-        }
-      }
-    );
-
-    return () => subscription.unsubscribe();
-  }, [navigate]);
-
-  const handleUserCreation = async (session: any) => {
-    try {
-      // Check if user exists in users table, if not create them
-      const { error } = await supabase
-        .from('users')
-        .insert([
-          {
-            id: session.user.id,
-            email: session.user.email
-          }
-        ])
-        .select()
-        .single();
-
-      // Use conflict handling as requested
-      if (error && !error.message.includes('duplicate key value violates unique constraint')) {
-        console.error('Error creating user:', error);
-      }
-    } catch (error) {
-      console.error('Error in handleUserCreation:', error);
+    if (isInitialized && user) {
+      navigate('/dashboard');
     }
+  }, [user, isInitialized, navigate]);
+
+  // Clear email error when email changes
+  useEffect(() => {
+    if (emailError) {
+      const validation = emailSchema.safeParse(email);
+      if (validation.success) {
+        setEmailError('');
+      }
+    }
+  }, [email, emailError]);
+
+  const validateEmail = () => {
+    const validation = emailSchema.safeParse(email);
+    if (!validation.success) {
+      setEmailError(validation.error.errors[0].message);
+      return false;
+    }
+    setEmailError('');
+    return true;
   };
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-
-    try {
-      const redirectUrl = `${window.location.origin}/`;
-      
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo: redirectUrl
-        }
-      });
-
-      if (error) {
-        toast({
-          variant: "destructive",
-          title: "Sign up failed",
-          description: error.message,
-        });
-      } else {
-        toast({
-          title: "Check your email",
-          description: "We sent you a confirmation link.",
-        });
-      }
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "An error occurred",
-        description: "Please try again later.",
-      });
-    } finally {
-      setLoading(false);
-    }
+    
+    if (!validateEmail()) return;
+    
+    await signUp({ email, password });
   };
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-
-    try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (error) {
-        toast({
-          variant: "destructive",
-          title: "Sign in failed",
-          description: error.message,
-        });
-      }
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "An error occurred",
-        description: "Please try again later.",
-      });
-    } finally {
-      setLoading(false);
+    
+    if (!validateEmail()) return;
+    
+    const result = await signIn({ email, password });
+    if (!result.error) {
+      navigate('/dashboard');
     }
   };
+
+  // Show loading state while initializing
+  if (!isInitialized) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-cyber-dark px-4">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-purple-500"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-cyber-dark px-4">
@@ -162,24 +108,26 @@ const Auth = () => {
                     placeholder="Enter your email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    onBlur={validateEmail}
+                    className={emailError ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''}
                     required
                   />
+                  {emailError && (
+                    <p className="text-sm text-red-500">{emailError}</p>
+                  )}
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="signin-password">Password</Label>
-                  <Input
-                    id="signin-password"
-                    type="password"
-                    placeholder="Enter your password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
-                </div>
+                <PasswordInput
+                  id="signin-password"
+                  label="Password"
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={setPassword}
+                  required
+                />
                 <Button 
                   type="submit" 
                   className="w-full bg-cyber-gradient hover:opacity-90 text-white font-semibold"
-                  disabled={loading}
+                  disabled={loading || !!emailError}
                 >
                   {loading ? 'Signing in...' : 'Sign In'}
                 </Button>
@@ -196,24 +144,27 @@ const Auth = () => {
                     placeholder="Enter your email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    onBlur={validateEmail}
+                    className={emailError ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''}
                     required
                   />
+                  {emailError && (
+                    <p className="text-sm text-red-500">{emailError}</p>
+                  )}
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="signup-password">Password</Label>
-                  <Input
-                    id="signup-password"
-                    type="password"
-                    placeholder="Create a password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
-                </div>
+                <PasswordInput
+                  id="signup-password"
+                  label="Password"
+                  placeholder="Create a strong password"
+                  value={password}
+                  onChange={setPassword}
+                  showStrength={true}
+                  required
+                />
                 <Button 
                   type="submit" 
                   className="w-full bg-cyber-gradient hover:opacity-90 text-white font-semibold"
-                  disabled={loading}
+                  disabled={loading || !!emailError}
                 >
                   {loading ? 'Creating account...' : 'Sign Up'}
                 </Button>

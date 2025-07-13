@@ -4,67 +4,102 @@ import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { LogOut } from 'lucide-react';
+import { useSecureAuth } from '@/hooks/useSecureAuth';
+import { LogOut, Shield, Clock } from 'lucide-react';
 
 const Dashboard = () => {
-  const [user, setUser] = useState<any>(null);
   const [userRecord, setUserRecord] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [lastActivity, setLastActivity] = useState<Date>(new Date());
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { user, session, signOut, isAuthenticated, isInitialized } = useSecureAuth();
+
+  // Session timeout handling (30 minutes of inactivity)
+  const SESSION_TIMEOUT = 30 * 60 * 1000; // 30 minutes
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (!session) {
-        navigate('/auth');
-        return;
+    // Redirect if not authenticated
+    if (isInitialized && !isAuthenticated) {
+      navigate('/auth');
+      return;
+    }
+
+    if (!user) return;
+
+    // Fetch user record securely
+    const fetchUserData = async () => {
+      try {
+        const { data: userData, error } = await supabase
+          .from('users')
+          .select('*')
+          .eq('id', user.id)
+          .maybeSingle(); // Use maybeSingle to avoid errors if no data
+
+        if (error) {
+          console.warn('Error fetching user data:', error.message);
+          toast({
+            variant: "destructive",
+            title: "Data access error",
+            description: "Unable to load your profile data. Please try refreshing.",
+          });
+        } else {
+          setUserRecord(userData);
+        }
+      } catch (error) {
+        console.warn('Network error fetching user data:', error);
+      } finally {
+        setLoading(false);
       }
-
-      setUser(session.user);
-
-      // Fetch user record from users table
-      const { data: userData, error } = await supabase
-        .from('users')
-        .select('*')
-        .eq('id', session.user.id)
-        .single();
-
-      if (error) {
-        console.error('Error fetching user data:', error);
-      } else {
-        setUserRecord(userData);
-      }
-
-      setLoading(false);
     };
 
-    checkAuth();
+    fetchUserData();
+  }, [user, isAuthenticated, isInitialized, navigate, toast]);
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        if (event === 'SIGNED_OUT') {
-          navigate('/auth');
-        }
+  // Activity tracking for session timeout
+  useEffect(() => {
+    const updateActivity = () => setLastActivity(new Date());
+    
+    const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'];
+    events.forEach(event => {
+      document.addEventListener(event, updateActivity, true);
+    });
+
+    const checkSessionTimeout = setInterval(() => {
+      const now = new Date();
+      const timeSinceActivity = now.getTime() - lastActivity.getTime();
+      
+      if (timeSinceActivity > SESSION_TIMEOUT && session) {
+        toast({
+          title: "Session expired",
+          description: "You've been signed out due to inactivity.",
+        });
+        signOut();
       }
-    );
+    }, 60000); // Check every minute
 
-    return () => subscription.unsubscribe();
-  }, [navigate]);
+    return () => {
+      events.forEach(event => {
+        document.removeEventListener(event, updateActivity, true);
+      });
+      clearInterval(checkSessionTimeout);
+    };
+  }, [lastActivity, session, signOut, toast]);
 
-  const handleSignOut = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
+  const handleSecureSignOut = async () => {
+    try {
+      await signOut();
+    } catch (error) {
       toast({
         variant: "destructive",
-        title: "Error signing out",
-        description: error.message,
+        title: "Sign out error",
+        description: "Please try again or clear your browser cache.",
       });
     }
   };
 
-  if (loading) {
+  // Show loading state
+  if (!isInitialized || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-cyber-dark">
         <div className="text-center">
@@ -73,6 +108,11 @@ const Dashboard = () => {
         </div>
       </div>
     );
+  }
+
+  // Redirect to auth if not authenticated
+  if (!isAuthenticated) {
+    return null; // Component will unmount as useEffect navigates
   }
 
   return (
@@ -87,15 +127,21 @@ const Dashboard = () => {
             />
             <h1 className="text-2xl font-bold cyber-text neon-glow">Dashboard</h1>
           </div>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleSignOut}
-            className="border-purple-500/20 hover:bg-purple-500/10"
-          >
-            <LogOut className="h-4 w-4 mr-2" />
-            Sign Out
-          </Button>
+          <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-1 text-xs text-muted-foreground">
+              <Shield className="h-3 w-3" />
+              <span>Secure Session</span>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleSecureSignOut}
+              className="border-purple-500/20 hover:bg-purple-500/10"
+            >
+              <LogOut className="h-4 w-4 mr-2" />
+              Sign Out
+            </Button>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -117,6 +163,10 @@ const Dashboard = () => {
                 <p className="font-medium">
                   {userRecord?.created_at ? new Date(userRecord.created_at).toLocaleDateString() : 'N/A'}
                 </p>
+              </div>
+              <div className="flex items-center space-x-1 text-xs text-green-600">
+                <Clock className="h-3 w-3" />
+                <span>Session active</span>
               </div>
             </CardContent>
           </Card>
@@ -150,14 +200,20 @@ const Dashboard = () => {
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground mb-4">
-                Your account has been successfully created. Start completing tasks to earn Akira Shards and unlock amazing rewards!
+                Your account has been successfully created and secured. Start completing tasks to earn Akira Shards and unlock amazing rewards!
               </p>
-              <Button 
-                onClick={() => navigate('/')}
-                className="bg-cyber-gradient hover:opacity-90 text-white font-semibold"
-              >
-                Explore Tasks
-              </Button>
+              <div className="flex space-x-4">
+                <Button 
+                  onClick={() => navigate('/')}
+                  className="bg-cyber-gradient hover:opacity-90 text-white font-semibold"
+                >
+                  Explore Tasks
+                </Button>
+                <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+                  <Shield className="h-4 w-4" />
+                  <span>Protected by RLS policies</span>
+                </div>
+              </div>
             </CardContent>
           </Card>
         </div>
