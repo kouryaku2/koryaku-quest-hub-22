@@ -22,6 +22,16 @@ const Header = () => {
           </div>
 
 
+          {/* Sign In / Sign Up Button */}
+          <Button
+            variant="outline"
+            size="sm"
+            className="hidden md:inline-flex border-purple-500/30 hover:border-purple-500/50 hover:bg-purple-500/10"
+            onClick={() => window.location.href = '/auth'}
+          >
+            Sign In / Sign Up
+          </Button>
+
           {/* Mobile Menu Button */}
           <Button
             variant="ghost"
