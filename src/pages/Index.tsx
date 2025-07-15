@@ -45,14 +45,14 @@ const Index = () => {
                 <div className="flex flex-col md:flex-row relative">
                    <div className="flex-1 p-6 md:p-8 relative z-10 overflow-hidden">
                      <div 
-                       className="absolute inset-0 opacity-20 blur-sm scale-110"
+                       className="absolute inset-0 opacity-30 blur-sm scale-110"
                        style={{
                          backgroundImage: `url('/lovable-uploads/aed5af5e-4b43-4159-bbd5-773b7f0200ff.png')`,
                          backgroundSize: 'cover',
                          backgroundPosition: 'center',
                        }}
                      ></div>
-                     <div className="absolute inset-0 bg-background/80 backdrop-blur-sm"></div>
+                     <div className="absolute inset-0 bg-white/10 backdrop-blur-md"></div>
                     <div className="relative z-10">
                       <h3 className="text-xl font-bold cyber-text mb-3">Genshin Impact</h3>
                       <p className="text-foreground/90 leading-relaxed">
@@ -75,14 +75,14 @@ const Index = () => {
                 <div className="flex flex-col md:flex-row relative">
                    <div className="flex-1 p-6 md:p-8 relative z-10 overflow-hidden">
                      <div 
-                       className="absolute inset-0 opacity-20 blur-sm scale-110"
+                       className="absolute inset-0 opacity-30 blur-sm scale-110"
                        style={{
                          backgroundImage: `url('/lovable-uploads/648d95ef-2aa8-4afc-89c7-dd468f53f610.png')`,
                          backgroundSize: 'cover',
                          backgroundPosition: 'center',
                        }}
                      ></div>
-                     <div className="absolute inset-0 bg-background/80 backdrop-blur-sm"></div>
+                     <div className="absolute inset-0 bg-white/10 backdrop-blur-md"></div>
                     <div className="relative z-10">
                       <h3 className="text-xl font-bold cyber-text mb-3">Honkai: Star Rail</h3>
                       <p className="text-foreground/90 leading-relaxed">
@@ -105,14 +105,14 @@ const Index = () => {
                 <div className="flex flex-col md:flex-row relative">
                    <div className="flex-1 p-6 md:p-8 relative z-10 overflow-hidden">
                      <div 
-                       className="absolute inset-0 opacity-20 blur-sm scale-110"
+                       className="absolute inset-0 opacity-30 blur-sm scale-110"
                        style={{
                          backgroundImage: `url('/lovable-uploads/fc994d08-50ce-4501-846a-c5e0972f6593.png')`,
                          backgroundSize: 'cover',
                          backgroundPosition: 'center',
                        }}
                      ></div>
-                     <div className="absolute inset-0 bg-background/80 backdrop-blur-sm"></div>
+                     <div className="absolute inset-0 bg-white/10 backdrop-blur-md"></div>
                     <div className="relative z-10">
                       <h3 className="text-xl font-bold cyber-text mb-3">PUBG Mobile</h3>
                       <p className="text-foreground/90 leading-relaxed">
@@ -135,14 +135,14 @@ const Index = () => {
                 <div className="flex flex-col md:flex-row relative">
                    <div className="flex-1 p-6 md:p-8 relative z-10 overflow-hidden">
                      <div 
-                       className="absolute inset-0 opacity-20 blur-sm scale-110"
+                       className="absolute inset-0 opacity-30 blur-sm scale-110"
                        style={{
                          backgroundImage: `url('/lovable-uploads/5d451198-00b8-446e-9242-018df06ce282.png')`,
                          backgroundSize: 'cover',
                          backgroundPosition: 'center',
                        }}
                      ></div>
-                     <div className="absolute inset-0 bg-background/80 backdrop-blur-sm"></div>
+                     <div className="absolute inset-0 bg-white/10 backdrop-blur-md"></div>
                     <div className="relative z-10">
                       <h3 className="text-xl font-bold cyber-text mb-3">Mobile Legends</h3>
                       <p className="text-foreground/90 leading-relaxed">
@@ -165,14 +165,14 @@ const Index = () => {
                 <div className="flex flex-col md:flex-row relative">
                    <div className="flex-1 p-6 md:p-8 relative z-10 overflow-hidden">
                      <div 
-                       className="absolute inset-0 opacity-20 blur-sm scale-110"
+                       className="absolute inset-0 opacity-30 blur-sm scale-110"
                        style={{
                          backgroundImage: `url('/lovable-uploads/53b87547-0f55-450c-a4b9-c176ad65ce72.png')`,
                          backgroundSize: 'cover',
                          backgroundPosition: 'center',
                        }}
                      ></div>
-                     <div className="absolute inset-0 bg-background/80 backdrop-blur-sm"></div>
+                     <div className="absolute inset-0 bg-white/10 backdrop-blur-md"></div>
                     <div className="relative z-10">
                       <h3 className="text-xl font-bold cyber-text mb-3">Free Fire</h3>
                       <p className="text-foreground/90 leading-relaxed">
@@ -195,14 +195,14 @@ const Index = () => {
                 <div className="flex flex-col md:flex-row relative">
                    <div className="flex-1 p-6 md:p-8 relative z-10 overflow-hidden">
                      <div 
-                       className="absolute inset-0 opacity-20 blur-sm scale-110"
+                       className="absolute inset-0 opacity-30 blur-sm scale-110"
                        style={{
                          backgroundImage: `url('/lovable-uploads/c82ef94e-11c0-45f5-867a-a41a93993dc6.png')`,
                          backgroundSize: 'cover',
                          backgroundPosition: 'center',
                        }}
                      ></div>
-                     <div className="absolute inset-0 bg-background/80 backdrop-blur-sm"></div>
+                     <div className="absolute inset-0 bg-white/10 backdrop-blur-md"></div>
                     <div className="relative z-10">
                       <h3 className="text-xl font-bold cyber-text mb-3">Wuthering Waves (WuWa)</h3>
                       <p className="text-foreground/90 leading-relaxed">
