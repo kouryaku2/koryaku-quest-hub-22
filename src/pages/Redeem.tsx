@@ -13,7 +13,7 @@ const Redeem = () => {
   const games = [
     {
       name: 'Genshin Impact',
-      logo: '/lovable-uploads/648d95ef-2aa8-4afc-89c7-dd468f53f610.png',
+      logo: '/lovable-uploads/a225482d-7e4f-4347-8eae-be8405cf9034.png',
       packages: [
         { name: 'Welkin Moon', cost: 648 },
         { name: 'Battle Pass', cost: 1298 },
