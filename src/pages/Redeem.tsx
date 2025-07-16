@@ -131,26 +131,44 @@ const Redeem = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {games.map((game, index) => (
             <Dialog key={game.name}>
               <DialogTrigger asChild>
-                <Card className="bg-card/80 backdrop-blur-sm border-purple-500/20 hover:bg-card/90 transition-all duration-300 cursor-pointer group h-full">
-                  <CardHeader className="text-center pb-4">
-                    <div className="mx-auto w-20 h-20 mb-4 group-hover:scale-110 transition-transform">
+                <Card className="relative overflow-hidden border-purple-500/20 hover:border-purple-500/40 transition-all duration-300 cursor-pointer group h-80">
+                  {/* Blurred background image */}
+                  <div 
+                    className="absolute inset-0 bg-cover bg-center scale-110 blur-sm opacity-60"
+                    style={{
+                      backgroundImage: `url(${game.logo})`,
+                      filter: 'blur(8px) brightness(0.3)'
+                    }}
+                  />
+                  
+                  {/* Overlay for better text readability */}
+                  <div className="absolute inset-0 bg-black/40" />
+                  
+                  {/* Content */}
+                  <div className="relative z-10 h-full flex flex-col items-center justify-center p-6 text-center">
+                    {/* Game icon - rounded corners, 100x100px */}
+                    <div className="w-[100px] h-[100px] mb-6 group-hover:scale-110 transition-transform">
                       <img 
                         src={game.logo} 
                         alt={`${game.name} Logo`}
-                        className="w-full h-full object-contain"
+                        className="w-full h-full object-cover rounded-xl shadow-lg"
                       />
                     </div>
-                    <CardTitle className="cyber-text text-lg">{game.name}</CardTitle>
-                  </CardHeader>
-                  <CardContent className="text-center">
-                    <p className="text-muted-foreground">
+                    
+                    {/* Game name */}
+                    <h3 className="cyber-text text-xl font-bold text-white mb-2 drop-shadow-lg">
+                      {game.name}
+                    </h3>
+                    
+                    {/* Description */}
+                    <p className="text-gray-200 text-sm drop-shadow-md">
                       View available top-up packages
                     </p>
-                  </CardContent>
+                  </div>
                 </Card>
               </DialogTrigger>
               <DialogContent className="bg-card/95 backdrop-blur-md border-purple-500/20 max-w-md">
