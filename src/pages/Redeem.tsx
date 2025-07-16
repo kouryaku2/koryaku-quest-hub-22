@@ -22,7 +22,7 @@ const Redeem = () => {
     },
     {
       name: 'Honkai: Star Rail',
-      logo: '/lovable-uploads/3ac42aad-2daf-4ad8-a856-47d2026c6ab4.png',
+      logo: '/lovable-uploads/ec93d3be-125a-4fce-8ccf-b68a7629ae6f.png',
       packages: [
         { name: 'Express Supply Pass', cost: 648 },
         { name: 'Nameless Glory', cost: 1298 }
