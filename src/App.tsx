@@ -7,6 +7,9 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
+import Tasks from "./pages/Tasks";
+import Redeem from "./pages/Redeem";
+import RedeemCodeDetector from "./pages/RedeemCodeDetector";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -25,6 +28,30 @@ const App = () => (
             element={
               <ProtectedRoute>
                 <Dashboard />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/tasks" 
+            element={
+              <ProtectedRoute>
+                <Tasks />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/redeem" 
+            element={
+              <ProtectedRoute>
+                <Redeem />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/redeem-code-detector" 
+            element={
+              <ProtectedRoute>
+                <RedeemCodeDetector />
               </ProtectedRoute>
             } 
           />

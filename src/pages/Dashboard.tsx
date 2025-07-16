@@ -5,12 +5,14 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { useSecureAuth } from '@/hooks/useSecureAuth';
-import { LogOut, Shield, Clock } from 'lucide-react';
+import { LogOut, Shield, Clock, Menu } from 'lucide-react';
+import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
 
 const Dashboard = () => {
   const [userRecord, setUserRecord] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [lastActivity, setLastActivity] = useState<Date>(new Date());
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
   const { user, session, signOut, isAuthenticated, isInitialized } = useSecureAuth();
@@ -120,6 +122,67 @@ const Dashboard = () => {
       <div className="container mx-auto max-w-4xl">
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center space-x-3">
+            <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
+              <DrawerTrigger asChild>
+                <Button variant="outline" size="sm" className="border-purple-500/20 hover:bg-purple-500/10">
+                  <Menu className="h-4 w-4" />
+                </Button>
+              </DrawerTrigger>
+              <DrawerContent className="bg-card/90 backdrop-blur-sm border-purple-500/20">
+                <div className="p-6 space-y-4">
+                  <div className="flex items-center space-x-3 mb-6">
+                    <img 
+                      src="/lovable-uploads/b0e4990b-327d-4606-8033-146175a890a0.png" 
+                      alt="Kōryaku Logo" 
+                      className="h-6 w-6"
+                    />
+                    <h2 className="text-lg font-bold cyber-text">Menu</h2>
+                  </div>
+                  <nav className="space-y-2">
+                    <Button 
+                      variant="ghost" 
+                      className="w-full justify-start"
+                      onClick={() => {
+                        navigate('/dashboard');
+                        setDrawerOpen(false);
+                      }}
+                    >
+                      Dashboard
+                    </Button>
+                    <Button 
+                      variant="ghost" 
+                      className="w-full justify-start"
+                      onClick={() => {
+                        navigate('/tasks');
+                        setDrawerOpen(false);
+                      }}
+                    >
+                      Tasks
+                    </Button>
+                    <Button 
+                      variant="ghost" 
+                      className="w-full justify-start"
+                      onClick={() => {
+                        navigate('/redeem-code-detector');
+                        setDrawerOpen(false);
+                      }}
+                    >
+                      Redeem Code Detector
+                    </Button>
+                    <Button 
+                      variant="ghost" 
+                      className="w-full justify-start"
+                      onClick={() => {
+                        navigate('/redeem');
+                        setDrawerOpen(false);
+                      }}
+                    >
+                      Redeem
+                    </Button>
+                  </nav>
+                </div>
+              </DrawerContent>
+            </Drawer>
             <img 
               src="/lovable-uploads/b0e4990b-327d-4606-8033-146175a890a0.png" 
               alt="Kōryaku Logo" 

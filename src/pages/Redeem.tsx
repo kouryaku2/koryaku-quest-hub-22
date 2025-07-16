@@ -1,0 +1,224 @@
+import { useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Menu } from 'lucide-react';
+import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
+import { useState } from 'react';
+
+const Redeem = () => {
+  const navigate = useNavigate();
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const games = [
+    {
+      name: 'Genshin Impact',
+      logo: '/lovable-uploads/648d95ef-2aa8-4afc-89c7-dd468f53f610.png',
+      packages: [
+        { name: 'Welkin Moon', cost: 648 },
+        { name: 'Battle Pass', cost: 1298 },
+        { name: '6480 Genesis Crystals', cost: 12998 }
+      ]
+    },
+    {
+      name: 'Honkai: Star Rail',
+      logo: '/lovable-uploads/3ac42aad-2daf-4ad8-a856-47d2026c6ab4.png',
+      packages: [
+        { name: 'Express Supply Pass', cost: 648 },
+        { name: 'Nameless Glory', cost: 1298 }
+      ]
+    },
+    {
+      name: 'PUBG Mobile',
+      logo: '/lovable-uploads/ad7af1fd-aba8-416d-aa03-59867df52d09.png',
+      packages: [
+        { name: '60 UC', cost: 129 },
+        { name: '325 UC', cost: 648 },
+        { name: '1800+ UC', cost: 3248 }
+      ]
+    },
+    {
+      name: 'Free Fire',
+      logo: '/lovable-uploads/53b87547-0f55-450c-a4b9-c176ad65ce72.png',
+      packages: [
+        { name: 'Weekly Membership', cost: 324 },
+        { name: 'Monthly Membership', cost: 1298 },
+        { name: '310 Diamonds', cost: 648 }
+      ]
+    },
+    {
+      name: 'Wuthering Waves',
+      logo: '/lovable-uploads/aed5af5e-4b43-4159-bbd5-773b7f0200ff.png',
+      packages: [
+        { name: 'Monthly Pass', cost: 648 },
+        { name: 'Basic Supply Pack', cost: 1948 }
+      ]
+    }
+  ];
+
+  return (
+    <div className="min-h-screen bg-cyber-dark px-4 py-8">
+      <div className="container mx-auto max-w-6xl">
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center space-x-3">
+            <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
+              <DrawerTrigger asChild>
+                <Button variant="outline" size="sm" className="border-purple-500/20 hover:bg-purple-500/10">
+                  <Menu className="h-4 w-4" />
+                </Button>
+              </DrawerTrigger>
+              <DrawerContent className="bg-card/90 backdrop-blur-sm border-purple-500/20">
+                <div className="p-6 space-y-4">
+                  <div className="flex items-center space-x-3 mb-6">
+                    <img 
+                      src="/lovable-uploads/b0e4990b-327d-4606-8033-146175a890a0.png" 
+                      alt="Kōryaku Logo" 
+                      className="h-6 w-6"
+                    />
+                    <h2 className="text-lg font-bold cyber-text">Menu</h2>
+                  </div>
+                  <nav className="space-y-2">
+                    <Button 
+                      variant="ghost" 
+                      className="w-full justify-start"
+                      onClick={() => {
+                        navigate('/dashboard');
+                        setDrawerOpen(false);
+                      }}
+                    >
+                      Dashboard
+                    </Button>
+                    <Button 
+                      variant="ghost" 
+                      className="w-full justify-start"
+                      onClick={() => {
+                        navigate('/tasks');
+                        setDrawerOpen(false);
+                      }}
+                    >
+                      Tasks
+                    </Button>
+                    <Button 
+                      variant="ghost" 
+                      className="w-full justify-start"
+                      onClick={() => {
+                        navigate('/redeem-code-detector');
+                        setDrawerOpen(false);
+                      }}
+                    >
+                      Redeem Code Detector
+                    </Button>
+                    <Button 
+                      variant="ghost" 
+                      className="w-full justify-start"
+                      onClick={() => {
+                        navigate('/redeem');
+                        setDrawerOpen(false);
+                      }}
+                    >
+                      Redeem
+                    </Button>
+                  </nav>
+                </div>
+              </DrawerContent>
+            </Drawer>
+            <img 
+              src="/lovable-uploads/b0e4990b-327d-4606-8033-146175a890a0.png" 
+              alt="Kōryaku Logo" 
+              className="h-8 w-8 animate-float"
+            />
+            <h1 className="text-2xl font-bold cyber-text neon-glow">Redeem</h1>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {games.map((game, index) => (
+            <Dialog key={game.name}>
+              <DialogTrigger asChild>
+                <Card className="bg-card/80 backdrop-blur-sm border-purple-500/20 hover:bg-card/90 transition-all duration-300 cursor-pointer group h-full">
+                  <CardHeader className="text-center pb-4">
+                    <div className="mx-auto w-20 h-20 mb-4 group-hover:scale-110 transition-transform">
+                      <img 
+                        src={game.logo} 
+                        alt={`${game.name} Logo`}
+                        className="w-full h-full object-contain"
+                      />
+                    </div>
+                    <CardTitle className="cyber-text text-lg">{game.name}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="text-center">
+                    <p className="text-muted-foreground">
+                      View available top-up packages
+                    </p>
+                  </CardContent>
+                </Card>
+              </DialogTrigger>
+              <DialogContent className="bg-card/95 backdrop-blur-md border-purple-500/20 max-w-md">
+                <DialogHeader>
+                  <div className="flex items-center space-x-3 mb-4">
+                    <img 
+                      src={game.logo} 
+                      alt={`${game.name} Logo`}
+                      className="w-8 h-8"
+                    />
+                    <DialogTitle className="cyber-text">{game.name} Packages</DialogTitle>
+                  </div>
+                </DialogHeader>
+                <div className="space-y-4">
+                  {game.packages.map((pkg, pkgIndex) => (
+                    <div 
+                      key={pkgIndex}
+                      className="bg-background/50 backdrop-blur-sm rounded-lg p-4 border border-purple-500/10"
+                    >
+                      <div className="flex justify-between items-center mb-3">
+                        <h3 className="font-semibold text-foreground">{pkg.name}</h3>
+                        <div className="flex items-center space-x-1">
+                          <img 
+                            src="/lovable-uploads/91627421-a2df-4dde-9c67-e6418fd6d4ef.png" 
+                            alt="Akira Shards" 
+                            className="h-4 w-4"
+                          />
+                          <span className="font-bold text-primary">{pkg.cost}</span>
+                        </div>
+                      </div>
+                      <Button 
+                        className="w-full bg-cyber-gradient hover:opacity-90 text-white font-semibold"
+                        disabled
+                      >
+                        Redeem
+                      </Button>
+                    </div>
+                  ))}
+                  <div className="text-center pt-4 border-t border-purple-500/10">
+                    <p className="text-xs text-muted-foreground">
+                      Redeem functionality coming soon
+                    </p>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
+          ))}
+        </div>
+
+        <div className="mt-8">
+          <Card className="bg-card/80 backdrop-blur-sm border-purple-500/20">
+            <CardHeader>
+              <CardTitle className="cyber-text">Redeem Guidelines</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3 text-muted-foreground">
+                <p>• All prices include a 30% service fee</p>
+                <p>• Redemptions are processed within 24-48 hours</p>
+                <p>• Ensure you have sufficient Akira Shards before redeeming</p>
+                <p>• Contact support if you encounter any issues with your redemption</p>
+                <p>• Game accounts must be verified before processing top-ups</p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Redeem;
