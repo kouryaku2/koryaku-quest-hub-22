@@ -48,7 +48,7 @@ const Redeem = () => {
     },
     {
       name: 'Wuthering Waves',
-      logo: '/lovable-uploads/aed5af5e-4b43-4159-bbd5-773b7f0200ff.png',
+      logo: '/lovable-uploads/eb64eea7-7749-46a1-98d4-e4f46daf2f3f.png',
       packages: [
         { name: 'Monthly Pass', cost: 648 },
         { name: 'Basic Supply Pack', cost: 1948 }
