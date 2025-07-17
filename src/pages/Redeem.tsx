@@ -39,7 +39,7 @@ const Redeem = () => {
     },
     {
       name: 'Free Fire',
-      logo: '/lovable-uploads/53b87547-0f55-450c-a4b9-c176ad65ce72.png',
+      logo: '/lovable-uploads/2a6696cc-3318-435c-a226-1c1be8e9f5f6.png',
       packages: [
         { name: 'Weekly Membership', cost: 324 },
         { name: 'Monthly Membership', cost: 1298 },
