@@ -30,7 +30,7 @@ const Redeem = () => {
     },
     {
       name: 'PUBG Mobile',
-      logo: '/lovable-uploads/ad7af1fd-aba8-416d-aa03-59867df52d09.png',
+      logo: '/lovable-uploads/c32a5ab6-d548-4905-bde6-2cc73909cb30.png',
       packages: [
         { name: '60 UC', cost: 129 },
         { name: '325 UC', cost: 648 },
