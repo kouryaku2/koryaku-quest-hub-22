@@ -1,11 +1,7 @@
 
-import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Menu, X, User } from 'lucide-react';
-import UserStats from '@/components/UserStats';
 
 const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 backdrop-blur-md bg-background/90 border-b border-purple-500/20">
@@ -22,7 +18,7 @@ const Header = () => {
           </div>
 
 
-          {/* Sign In / Sign Up Button */}
+          {/* Sign In / Sign Up Button - Desktop */}
           <Button
             variant="outline"
             size="sm"
@@ -32,14 +28,14 @@ const Header = () => {
             Sign In / Sign Up
           </Button>
 
-          {/* Mobile Menu Button */}
+          {/* Sign In / Sign Up Button - Mobile */}
           <Button
-            variant="ghost"
+            variant="outline"
             size="sm"
-            className="md:hidden"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="md:hidden text-xs px-3 py-2 border-purple-500/30 hover:border-purple-500/50 hover:bg-purple-500/10"
+            onClick={() => window.location.href = '/auth'}
           >
-            {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            Sign In / Sign Up
           </Button>
         </div>
 
